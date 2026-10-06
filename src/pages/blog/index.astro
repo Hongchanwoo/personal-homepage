@@ -1,0 +1,26 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('posts')).sort(
+	(a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+---
+
+<Layout title="Blog" description="블로그 글 목록">
+	<h1 class="text-2xl font-bold">Blog</h1>
+
+	<ul class="mt-8 space-y-8">
+		{posts.map((post) => (
+			<li>
+				<a href={`/blog/${post.id}`} class="text-lg font-semibold hover:underline">
+					{post.data.title}
+				</a>
+				<p class="text-sm text-gray-400">
+					{post.data.date.toLocaleDateString('ko-KR')}
+				</p>
+				<p class="mt-1 text-gray-600">{post.data.summary}</p>
+			</li>
+		))}
+	</ul>
+</Layout>
